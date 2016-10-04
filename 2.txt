@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 23 22:36:38 2016
+
+@author: Ins
+"""
+
+import matplotlib.pyplot as plt
+import pandas as pd #this is how I usually import pandas
+import sys #only needed to determine Python version number
+import matplotlib #only needed to determine Matplotlib version number
+from sklearn.tree import DecisionTreeClassifier
+
+data = pd.read_csv('C:\\Users\\Ins\\Downloads\\titanic.csv', index_col='PassengerId')
+datax = data[['Pclass','Fare','Age', 'Sex', 'Survived']]
+datax2 =datax[datax.Age.notnull()]
+vals_to_replace = {'male':0, 'female':1}
+x = datax2[['Pclass','Fare','Age', 'Sex']]
+print(x)
+x['Sex']=x['Sex'].map(vals_to_replace)
+y= datax2['Survived']
+print(x)
+
+from sklearn import tree
+
+clf = tree.DecisionTreeClassifier( random_state=241)
+clf.fit(x,y)
+print(clf.feature_importances_)
+result = clf.predict([[ 1, 100, 15, 0]])
+print('Result=', result)
+
+from sklearn.externals.six import StringIO 
+dot_data = StringIO()  
+with open("iris.dot", 'w') as f:
+  f = tree.export_graphviz(clf, out_file=f)
